@@ -1,7 +1,7 @@
 {
     "id": "dh-improved-countdowns",
+    "name": "dh-improved-countdowns",
     "title": "Improved Countdowns",
-    "description": "A modern, draggable countdown tracker for the Daggerheart system.",
     "version": "1.0.0",
     "compatibility": {
         "minimum": "13",
@@ -9,13 +9,19 @@
     },
     "authors": [
         {
-            "name": "CPTN Cosmo"
+            "name": "CPTN Cosmo",
+            "email": "cptncosmo@gmail.com",
+            "url": "https://github.com/cptn-cosmo",
+            "discord": "cptn_cosmo",
+            "flags": {}
         }
     ],
     "relationships": {
         "systems": [
             {
-                "id": "daggerheart"
+                "id": "daggerheart",
+                "type": "system",
+                "compatibility": {}
             }
         ]
     },
@@ -24,5 +30,6 @@
     ],
     "styles": [
         "styles/countdown.css"
-    ]
+    ],
+    "description": "A modern, draggable countdown tracker for the Daggerheart system."
 }
