@@ -1,0 +1,51 @@
+<div class="countdown-tracker-window {{#if isMinimized}}minimized{{/if}} {{#if isLocked}}locked{{/if}}">
+    <div class="tracker-header">
+        <div class="drag-handle" data-tooltip="Drag to move">
+            <i class="fa-solid fa-grip-vertical"></i>
+        </div>
+        <div class="header-controls">
+            {{#if isGM}}
+            <a class="control-btn" data-action="addCountdown" data-tooltip="Add New Countdown">
+                <i class="fa-solid fa-plus-circle"></i>
+            </a>
+            {{/if}}
+            <a class="control-btn" data-action="toggleLock" data-tooltip="{{#if isLocked}}Unlock Window{{else}}Lock Window{{/if}}">
+                <i class="fa-solid {{#if isLocked}}fa-lock{{else}}fa-lock-open{{/if}}"></i>
+            </a>
+            <a class="control-btn" data-action="toggleViewMode" data-tooltip="{{#if isMinimized}}Maximize{{else}}Minimize{{/if}}">
+                <i class="fa-solid {{#if isMinimized}}fa-expand-alt{{else}}fa-compress-alt{{/if}}"></i>
+            </a>
+        </div>
+    </div>
+
+    <div class="countdowns-list">
+        {{#each countdowns as | countdown id |}}
+        <div class="countdown-item" data-id="{{id}}">
+            {{#unless ../isMinimized}}
+            <div class="countdown-name">{{countdown.name}}</div>
+            {{/unless}}
+            
+            <div class="countdown-visual">
+                {{#if countdown.editable}}
+                <a class="value-control minus" data-action="decreaseCountdown" data-id="{{id}}">
+                    <i class="fa-solid fa-minus"></i>
+                </a>
+                {{/if}}
+                
+                <div class="icon-container" {{#if ../isMinimized}}data-tooltip="{{countdown.name}}"{{/if}}>
+                    <img src="{{countdown.img}}" class="countdown-icon" />
+                    <div class="value-overlay">{{countdown.progress.current}}</div>
+                </div>
+
+                {{#if countdown.editable}}
+                <a class="value-control plus" data-action="increaseCountdown" data-id="{{id}}">
+                    <i class="fa-solid fa-plus"></i>
+                </a>
+                {{/if}}
+            </div>
+        </div>
+        {{else}}
+        <div class="no-countdowns">No Active Countdowns</div>
+        {{/each}}
+    </div>
+</div>

@@ -1,0 +1,183 @@
+/* Hide default Daggerheart countdown tracker */
+.daggerheart.countdowns {
+    display: none !important;
+}
+
+/* Modern Countdown Tracker Application */
+.dh-improved-countdowns {
+    pointer-events: none;
+    /* Let clicks pass through to child elements */
+    z-index: 100;
+}
+
+.countdown-tracker-window {
+    pointer-events: all;
+    background: rgba(20, 20, 25, 0.85);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease;
+    min-width: 120px;
+    color: #eee;
+    font-family: 'Inter', 'Roboto', sans-serif;
+}
+
+.countdown-tracker-window.minimized {
+    min-width: 60px;
+}
+
+/* Header and Drag Handle */
+.tracker-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+    transition: all 0.2s ease;
+}
+
+.countdown-tracker-window:hover .tracker-header {
+    opacity: 1;
+    height: 24px;
+    margin-bottom: 4px;
+}
+
+.drag-handle {
+    cursor: grab;
+    color: rgba(255, 255, 255, 0.5);
+    padding: 2px 8px;
+}
+
+.countdown-tracker-window.locked .drag-handle {
+    display: none;
+}
+
+.header-controls {
+    display: flex;
+    gap: 8px;
+    padding-right: 4px;
+}
+
+.control-btn {
+    color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.control-btn:hover {
+    color: #fff;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+/* Countdowns List */
+.countdowns-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.countdown-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    position: relative;
+}
+
+.countdown-name {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: rgba(255, 255, 255, 0.8);
+    text-align: center;
+    max-width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.countdown-visual {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.icon-container {
+    position: relative;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+}
+
+.countdown-icon {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.value-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 22px;
+    font-weight: 800;
+    color: #fff;
+    text-shadow: 0 0 4px rgba(0, 0, 0, 0.9), 0 0 8px rgba(0, 0, 0, 0.9);
+    pointer-events: none;
+}
+
+/* +/- Controls */
+.value-control {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    cursor: pointer;
+    color: #ccc;
+    font-size: 12px;
+}
+
+.countdown-item:hover .value-control {
+    opacity: 1;
+}
+
+.value-control:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+.value-control.plus:hover {
+    background: rgba(74, 222, 128, 0.2);
+    color: #4ade80;
+}
+
+.value-control.minus:hover {
+    background: rgba(248, 113, 113, 0.2);
+    color: #f87171;
+}
+
+/* No Countdowns State */
+.no-countdowns {
+    font-size: 11px;
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.4);
+    padding: 8px;
+    text-align: center;
+}
