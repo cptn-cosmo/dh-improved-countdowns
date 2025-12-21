@@ -5,6 +5,7 @@
 
 /* Modern Countdown Tracker Application */
 .dh-improved-countdowns {
+    position: fixed;
     pointer-events: none;
     /* Let clicks pass through to child elements */
     z-index: 100;
@@ -12,23 +13,50 @@
 
 .countdown-tracker-window {
     pointer-events: all;
-    background: rgba(20, 20, 25, 0.85);
+    background: rgba(20, 20, 25, 0.25);
     backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 12px;
     padding: 8px;
     display: flex;
     flex-direction: column;
     gap: 12px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    box-shadow: none;
     transition: all 0.3s ease;
     min-width: 120px;
     color: #eee;
     font-family: 'Inter', 'Roboto', sans-serif;
 }
 
+.countdown-tracker-window:hover {
+    background: rgba(20, 20, 25, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
 .countdown-tracker-window.minimized {
-    min-width: 60px;
+    min-width: fit-content;
+    padding: 8px 12px;
+}
+
+.countdown-tracker-window.minimized .value-control {
+    display: none;
+}
+
+.countdown-tracker-window.minimized .countdown-visual {
+    gap: 0;
+}
+
+.countdown-tracker-window.minimized:hover {
+    min-width: 120px;
+}
+
+.countdown-tracker-window.minimized:hover .value-control {
+    display: flex;
+}
+
+.countdown-tracker-window.minimized:hover .countdown-visual {
+    gap: 10px;
 }
 
 /* Header and Drag Handle */
@@ -180,4 +208,42 @@
     color: rgba(255, 255, 255, 0.4);
     padding: 8px;
     text-align: center;
+}
+
+/* Sidebar Injection */
+.dh-improved-countdowns-sidebar {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 8px;
+    margin-top: 8px;
+}
+
+.dh-improved-countdowns-sidebar .menu-refresh-container {
+    display: flex;
+    justify-content: center;
+}
+
+.dh-improved-countdowns-sidebar .create-countdown-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    color: #eee;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 13px;
+    padding: 6px 12px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dh-improved-countdowns-sidebar .create-countdown-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+.dh-improved-countdowns-sidebar i {
+    font-size: 12px;
 }

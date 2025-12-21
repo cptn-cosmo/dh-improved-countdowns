@@ -31,5 +31,12 @@
     "styles": [
         "styles/countdown.css"
     ],
+    "languages": [
+        {
+            "lang": "en",
+            "name": "English",
+            "path": "lang/en.json"
+        }
+    ],
     "description": "A modern, draggable countdown tracker for the Daggerheart system."
 }

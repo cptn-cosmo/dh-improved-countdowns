@@ -34,7 +34,9 @@
                 
                 <div class="icon-container" {{#if ../isMinimized}}data-tooltip="{{countdown.name}}"{{/if}}>
                     <img src="{{countdown.img}}" class="countdown-icon" />
-                    <div class="value-overlay">{{countdown.progress.current}}</div>
+                    <div class="value-overlay">
+                        {{countdown.progress.current}}{{#unless ../isMinimized}}<span class="max-value">/{{countdown.progress.start}}</span>{{/unless}}
+                    </div>
                 </div>
 
                 {{#if countdown.editable}}

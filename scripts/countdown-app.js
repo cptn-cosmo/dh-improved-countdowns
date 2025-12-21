@@ -16,7 +16,7 @@ export class CountdownTrackerApp extends HandlebarsApplicationMixin(ApplicationV
 
     static DEFAULT_OPTIONS = {
         id: "dh-improved-countdowns-app",
-        tag: "aside",
+        tag: "div",
         classes: ["dh-improved-countdowns"],
         window: {
             frame: false,
@@ -53,7 +53,7 @@ export class CountdownTrackerApp extends HandlebarsApplicationMixin(ApplicationV
         const isLocked = game.settings.get("dh-improved-countdowns", "locked");
 
         // Fetch countdowns from system settings
-        const systemCountdownSetting = game.settings.get("daggerheart", "countdowns");
+        const systemCountdownSetting = game.settings.get("daggerheart", "Countdowns");
         const countdowns = {};
 
         if (systemCountdownSetting && systemCountdownSetting.countdowns) {

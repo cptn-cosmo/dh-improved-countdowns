@@ -38,15 +38,32 @@ Hooks.once('ready', () => {
 });
 
 // Re-render when countdowns change in the system
-Hooks.on('daggerheart.refresh', (data) => {
-    if (data.refreshType === "countdown" || data.refreshType === 4) { // 4 is RefreshType.Countdown in Daggerheart
+Hooks.on('DhRefresh', (data) => {
+    if (data.refreshType === "DhCoundownRefresh") {
         CountdownTrackerApp.instance?.render();
     }
 });
 
-// Generic socket refresh if system refresh doesn't catch everything
-Hooks.on('refresh', (data) => {
-    if (data.refreshType === "countdown") {
-        CountdownTrackerApp.instance?.render();
-    }
+// Inject "Create Countdown" button into Daggerheart GM Sidebar
+Hooks.on('renderDaggerheartMenu', (app, html) => {
+    if (!game.user.isGM) return;
+
+    const fieldset = document.createElement('fieldset');
+    fieldset.classList.add('dh-improved-countdowns-sidebar');
+    fieldset.innerHTML = `
+        <legend>${game.i18n.localize("DHIC.Countdowns")}</legend>
+        <div class="menu-refresh-container">
+            <button type="button" class="create-countdown-btn">
+                <i class="fa-solid fa-clock"></i> ${game.i18n.localize("DHIC.CreateNewCountdown")}
+            </button>
+        </div>
+    `;
+
+    fieldset.querySelector('.create-countdown-btn').addEventListener('click', () => {
+        if (game.system.api.applications.ui.CountdownEdit) {
+            new game.system.api.applications.ui.CountdownEdit().render(true);
+        }
+    });
+
+    html.appendChild(fieldset);
 });
