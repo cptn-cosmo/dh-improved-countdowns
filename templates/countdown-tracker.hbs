@@ -9,10 +9,12 @@
                 <i class="fa-solid fa-plus-circle"></i>
             </a>
             {{/if}}
-            <a class="control-btn" data-action="toggleLock" data-tooltip="{{#if isLocked}}Unlock Window{{else}}Lock Window{{/if}}">
+            <a class="control-btn" data-action="toggleLock"
+                data-tooltip="{{#if isLocked}}Unlock Window{{else}}Lock Window{{/if}}">
                 <i class="fa-solid {{#if isLocked}}fa-lock{{else}}fa-lock-open{{/if}}"></i>
             </a>
-            <a class="control-btn" data-action="toggleViewMode" data-tooltip="{{#if isMinimized}}Maximize{{else}}Minimize{{/if}}">
+            <a class="control-btn" data-action="toggleViewMode"
+                data-tooltip="{{#if isMinimized}}Maximize{{else}}Minimize{{/if}}">
                 <i class="fa-solid {{#if isMinimized}}fa-expand-alt{{else}}fa-compress-alt{{/if}}"></i>
             </a>
         </div>
@@ -24,19 +26,53 @@
             {{#unless ../isMinimized}}
             <div class="countdown-name">{{countdown.name}}</div>
             {{/unless}}
-            
+
             <div class="countdown-visual">
                 {{#if countdown.editable}}
                 <a class="value-control minus" data-action="decreaseCountdown" data-id="{{id}}">
                     <i class="fa-solid fa-minus"></i>
                 </a>
                 {{/if}}
-                
-                <div class="icon-container" {{#if ../isMinimized}}data-tooltip="{{countdown.name}}"{{/if}}>
+
+                <div class="icon-container {{countdown.cssClass}}" {{#if
+                    ../isMinimized}}data-tooltip="{{countdown.name}}" {{/if}}>
                     <img src="{{countdown.img}}" class="countdown-icon" />
-                    <div class="value-overlay">
-                        {{countdown.progress.current}}{{#unless ../isMinimized}}<span class="max-value">/{{countdown.progress.start}}</span>{{/unless}}
+
+                    {{#if ../showNumbers}}
+                    <div class="value-overlay number">
+                        {{countdown.progress.current}}{{#unless ../isMinimized}}<span
+                            class="max-value">/{{countdown.progress.start}}</span>{{/unless}}
                     </div>
+                    {{else}}
+                    <div class="value-overlay visual">
+                        {{#if ../enableVisualOverlay}}
+                        {{#if (eq ../iconShape "circle")}}
+                        <div class="clock-visual"
+                            style="background: conic-gradient({{../visualColor}} {{countdown.percentage}}%, transparent {{countdown.percentage}}%); opacity: 0.4;">
+                        </div>
+                        {{else}}
+                        <div class="bar-visual {{../barOrientation}}"
+                            style="background-color: {{../visualColor}}; opacity: 0.4; {{#if (eq ../barOrientation 'horizontal')}}width: {{countdown.percentage}}%;{{else}}height: {{countdown.percentage}}%;{{/if}}">
+                        </div>
+                        {{/if}}
+                        {{/if}}
+
+                        {{#if ../enableVisualBorder}}
+                        <svg class="progress-border-svg" viewBox="0 0 48 48" style="transform: rotate(-90deg);">
+                            {{#if (eq ../iconShape "circle")}}
+                            <circle cx="24" cy="24" r="23" fill="none" stroke="{{../visualColor}}" stroke-width="2"
+                                pathLength="100" stroke-dasharray="{{countdown.percentage}} 100"
+                                style="transition: stroke-dasharray 0.3s ease; opacity: 1;"></circle>
+                            {{else}}
+                            <rect x="1" y="1" width="46" height="46" rx="8" ry="8" fill="none"
+                                stroke="{{../visualColor}}" stroke-width="2" pathLength="100"
+                                stroke-dasharray="{{countdown.percentage}} 100"
+                                style="transition: stroke-dasharray 0.3s ease; opacity: 1;"></rect>
+                            {{/if}}
+                        </svg>
+                        {{/if}}
+                    </div>
+                    {{/if}}
                 </div>
 
                 {{#if countdown.editable}}

@@ -51,6 +51,15 @@ export class CountdownTrackerApp extends HandlebarsApplicationMixin(ApplicationV
         const isGM = game.user.isGM;
         const isMinimized = game.settings.get("dh-improved-countdowns", "minimized");
         const isLocked = game.settings.get("dh-improved-countdowns", "locked");
+        const iconShape = game.settings.get("dh-improved-countdowns", "iconShape");
+        const displayMode = game.settings.get("dh-improved-countdowns", "displayMode");
+        const barOrientation = game.settings.get("dh-improved-countdowns", "barOrientation");
+        const visualColor = game.settings.get("dh-improved-countdowns", "visualColor");
+        const enableVisualOverlay = game.settings.get("dh-improved-countdowns", "enableVisualOverlay");
+        const enableVisualBorder = game.settings.get("dh-improved-countdowns", "enableVisualBorder");
+        const gmAlwaysShowNumbers = game.settings.get("dh-improved-countdowns", "gmAlwaysShowNumbers");
+
+        const showNumbers = (isGM && gmAlwaysShowNumbers) || displayMode === "number";
 
         // Fetch countdowns from system settings
         const systemCountdownSetting = game.settings.get("daggerheart", "Countdowns");
@@ -60,9 +69,15 @@ export class CountdownTrackerApp extends HandlebarsApplicationMixin(ApplicationV
             for (const [id, countdown] of Object.entries(systemCountdownSetting.countdowns)) {
                 const ownership = this.#getPlayerOwnership(game.user, systemCountdownSetting, countdown);
                 if (ownership !== CONST.DOCUMENT_OWNERSHIP_LEVELS.NONE) {
+                    const current = countdown.progress.current;
+                    const max = countdown.progress.start;
+                    const percentage = Math.max(0, Math.min(100, (current / max) * 100));
+
                     countdowns[id] = {
                         ...countdown,
-                        editable: isGM || ownership === CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER
+                        editable: isGM || ownership === CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER,
+                        percentage,
+                        cssClass: `shape-${iconShape}`
                     };
                 }
             }
@@ -72,7 +87,13 @@ export class CountdownTrackerApp extends HandlebarsApplicationMixin(ApplicationV
             countdowns,
             isGM,
             isMinimized,
-            isLocked
+            isLocked,
+            showNumbers,
+            iconShape,
+            barOrientation,
+            visualColor,
+            enableVisualOverlay,
+            enableVisualBorder
         };
     }
 

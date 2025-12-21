@@ -28,6 +28,88 @@ Hooks.once('init', () => {
         default: false,
         onChange: () => CountdownTrackerApp.instance?.render()
     });
+
+    game.settings.register("dh-improved-countdowns", "iconShape", {
+        name: "Icon Shape",
+        hint: "Choose the shape of the countdown icons.",
+        scope: "client",
+        config: true,
+        type: String,
+        choices: {
+            "rounded": "Rounded Square",
+            "circle": "Circle"
+        },
+        default: "rounded",
+        onChange: () => CountdownTrackerApp.instance?.render()
+    });
+
+    game.settings.register("dh-improved-countdowns", "displayMode", {
+        name: "Display Mode",
+        hint: "Choose how the countdown value is displayed.",
+        scope: "world",
+        config: true,
+        type: String,
+        choices: {
+            "number": "Number",
+            "visual": "Visual (Bar/Clock)"
+        },
+        default: "number",
+        onChange: () => CountdownTrackerApp.instance?.render()
+    });
+
+    game.settings.register("dh-improved-countdowns", "barOrientation", {
+        name: "Bar Orientation",
+        hint: "Choose the orientation of the progress bar (for square icons).",
+        scope: "client",
+        config: true,
+        type: String,
+        choices: {
+            "vertical": "Vertical",
+            "horizontal": "Horizontal"
+        },
+        default: "vertical",
+        onChange: () => CountdownTrackerApp.instance?.render()
+    });
+
+    game.settings.register("dh-improved-countdowns", "visualColor", {
+        name: "Visual Color",
+        hint: "Choose the color for the progress overlay and border.",
+        scope: "client",
+        config: true,
+        type: String,
+        default: "#ffffff",
+        onChange: () => CountdownTrackerApp.instance?.render()
+    });
+
+    game.settings.register("dh-improved-countdowns", "enableVisualOverlay", {
+        name: "Enable Fill Overlay",
+        hint: "Show the filled progress overlay (Bar or Clock).",
+        scope: "client",
+        config: true,
+        type: Boolean,
+        default: true,
+        onChange: () => CountdownTrackerApp.instance?.render()
+    });
+
+    game.settings.register("dh-improved-countdowns", "enableVisualBorder", {
+        name: "Enable Border Progress",
+        hint: "Show a progress border around the icon.",
+        scope: "client",
+        config: true,
+        type: Boolean,
+        default: false,
+        onChange: () => CountdownTrackerApp.instance?.render()
+    });
+
+    game.settings.register("dh-improved-countdowns", "gmAlwaysShowNumbers", {
+        name: "GM Always Shows Numbers",
+        hint: "If enabled, the GM will always see the numerical value even if Display Mode is set to Visual.",
+        scope: "client", // This should be client-scoped as it's a preference for the GM user
+        config: true,
+        type: Boolean,
+        default: true,
+        onChange: () => CountdownTrackerApp.instance?.render()
+    });
 });
 
 Hooks.once('ready', () => {
