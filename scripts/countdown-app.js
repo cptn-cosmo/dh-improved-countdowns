@@ -54,12 +54,18 @@ export class CountdownTrackerApp extends HandlebarsApplicationMixin(ApplicationV
         const iconShape = game.settings.get("dh-improved-countdowns", "iconShape");
         const displayMode = game.settings.get("dh-improved-countdowns", "displayMode");
         const barOrientation = game.settings.get("dh-improved-countdowns", "barOrientation");
-        const visualColor = game.settings.get("dh-improved-countdowns", "visualColor");
         const enableVisualOverlay = game.settings.get("dh-improved-countdowns", "enableVisualOverlay");
+        const fillType = game.settings.get("dh-improved-countdowns", "fillType");
+        const invertProgress = game.settings.get("dh-improved-countdowns", "invertProgress");
+        const numberColor = game.settings.get("dh-improved-countdowns", "numberColor");
+        const fillColor = game.settings.get("dh-improved-countdowns", "fillColor");
         const enableVisualBorder = game.settings.get("dh-improved-countdowns", "enableVisualBorder");
+        const invertBorder = game.settings.get("dh-improved-countdowns", "invertBorder");
+        const borderColor = game.settings.get("dh-improved-countdowns", "borderColor");
         const gmAlwaysShowNumbers = game.settings.get("dh-improved-countdowns", "gmAlwaysShowNumbers");
 
-        const showNumbers = (isGM && gmAlwaysShowNumbers) || displayMode === "number";
+        const showNumbers = (isGM && gmAlwaysShowNumbers) || displayMode === "number" || displayMode === "both";
+        const showVisuals = displayMode === "visual" || displayMode === "both";
 
         // Fetch countdowns from system settings
         const systemCountdownSetting = game.settings.get("daggerheart", "Countdowns");
@@ -71,12 +77,20 @@ export class CountdownTrackerApp extends HandlebarsApplicationMixin(ApplicationV
                 if (ownership !== CONST.DOCUMENT_OWNERSHIP_LEVELS.NONE) {
                     const current = countdown.progress.current;
                     const max = countdown.progress.start;
-                    const percentage = Math.max(0, Math.min(100, (current / max) * 100));
+                    let percentage = Math.max(0, Math.min(100, (current / max) * 100));
+                    const pctRemaining = 100 - percentage;
+
+                    /* 
+                    if (invertProgress) {
+                         // We handle inversion in template now to preserve position
+                    } 
+                    */
 
                     countdowns[id] = {
                         ...countdown,
                         editable: isGM || ownership === CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER,
                         percentage,
+                        pctRemaining,
                         cssClass: `shape-${iconShape}`
                     };
                 }
@@ -89,11 +103,17 @@ export class CountdownTrackerApp extends HandlebarsApplicationMixin(ApplicationV
             isMinimized,
             isLocked,
             showNumbers,
+            showVisuals,
             iconShape,
             barOrientation,
-            visualColor,
             enableVisualOverlay,
-            enableVisualBorder
+            fillType,
+            fillColor,
+            enableVisualBorder,
+            invertBorder,
+            borderColor,
+            invertProgress,
+            numberColor
         };
     }
 
@@ -130,13 +150,13 @@ export class CountdownTrackerApp extends HandlebarsApplicationMixin(ApplicationV
     static async #onToggleView(event, target) {
         const current = game.settings.get("dh-improved-countdowns", "minimized");
         await game.settings.set("dh-improved-countdowns", "minimized", !current);
-        this.instance.render();
+        CountdownTrackerApp.instance?.render();
     }
 
     static async #onToggleLock(event, target) {
         const current = game.settings.get("dh-improved-countdowns", "locked");
         await game.settings.set("dh-improved-countdowns", "locked", !current);
-        this.instance.render();
+        CountdownTrackerApp.instance?.render();
     }
 
     _onRender(context, options) {

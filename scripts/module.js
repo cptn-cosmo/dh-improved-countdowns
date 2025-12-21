@@ -14,7 +14,7 @@ Hooks.once('init', () => {
         name: "Lock Tracker Position",
         hint: "Prevents the countdown tracker from being dragged.",
         scope: "client",
-        config: true,
+        config: false, // Hidden from settings menu, toggled via UI
         type: Boolean,
         default: false,
         onChange: () => CountdownTrackerApp.instance?.render()
@@ -26,6 +26,21 @@ Hooks.once('init', () => {
         config: false,
         type: Boolean,
         default: false,
+        onChange: () => CountdownTrackerApp.instance?.render()
+    });
+
+    game.settings.register("dh-improved-countdowns", "displayMode", {
+        name: "Display Mode",
+        hint: "Choose how the countdown value is displayed.",
+        scope: "world",
+        config: true,
+        type: String,
+        choices: {
+            "number": "Number Only",
+            "visual": "Visual Only",
+            "both": "Visual + Number"
+        },
+        default: "number",
         onChange: () => CountdownTrackerApp.instance?.render()
     });
 
@@ -43,17 +58,13 @@ Hooks.once('init', () => {
         onChange: () => CountdownTrackerApp.instance?.render()
     });
 
-    game.settings.register("dh-improved-countdowns", "displayMode", {
-        name: "Display Mode",
-        hint: "Choose how the countdown value is displayed.",
-        scope: "world",
+    game.settings.register("dh-improved-countdowns", "numberColor", {
+        name: "Number Color",
+        hint: "Color for the numerical text.",
+        scope: "client",
         config: true,
         type: String,
-        choices: {
-            "number": "Number",
-            "visual": "Visual (Bar/Clock)"
-        },
-        default: "number",
+        default: "#ffffff",
         onChange: () => CountdownTrackerApp.instance?.render()
     });
 
@@ -71,16 +82,6 @@ Hooks.once('init', () => {
         onChange: () => CountdownTrackerApp.instance?.render()
     });
 
-    game.settings.register("dh-improved-countdowns", "visualColor", {
-        name: "Visual Color",
-        hint: "Choose the color for the progress overlay and border.",
-        scope: "client",
-        config: true,
-        type: String,
-        default: "#ffffff",
-        onChange: () => CountdownTrackerApp.instance?.render()
-    });
-
     game.settings.register("dh-improved-countdowns", "enableVisualOverlay", {
         name: "Enable Fill Overlay",
         hint: "Show the filled progress overlay (Bar or Clock).",
@@ -88,6 +89,40 @@ Hooks.once('init', () => {
         config: true,
         type: Boolean,
         default: true,
+        onChange: () => CountdownTrackerApp.instance?.render()
+    });
+
+    game.settings.register("dh-improved-countdowns", "fillType", {
+        name: "Fill Type",
+        hint: "Choose between a color overlay or a grayscale filter method.",
+        scope: "client",
+        config: true,
+        type: String,
+        choices: {
+            "color": "Color Overlay",
+            "grayscale": "Grayscale Filter"
+        },
+        default: "color",
+        onChange: () => CountdownTrackerApp.instance?.render()
+    });
+
+    game.settings.register("dh-improved-countdowns", "invertProgress", {
+        name: "Invert Fill Overlay",
+        hint: "Fill the empty space instead of the current value.",
+        scope: "client",
+        config: true,
+        type: Boolean,
+        default: false,
+        onChange: () => CountdownTrackerApp.instance?.render()
+    });
+
+    game.settings.register("dh-improved-countdowns", "fillColor", {
+        name: "Fill Overlay Color",
+        hint: "Color for the filled progress overlay.",
+        scope: "client",
+        config: true,
+        type: String,
+        default: "#ffffff",
         onChange: () => CountdownTrackerApp.instance?.render()
     });
 
@@ -101,6 +136,26 @@ Hooks.once('init', () => {
         onChange: () => CountdownTrackerApp.instance?.render()
     });
 
+    game.settings.register("dh-improved-countdowns", "invertBorder", {
+        name: "Invert Border Progress",
+        hint: "Fill the empty space instead of the current value for the border.",
+        scope: "client",
+        config: true,
+        type: Boolean,
+        default: false,
+        onChange: () => CountdownTrackerApp.instance?.render()
+    });
+
+    game.settings.register("dh-improved-countdowns", "borderColor", {
+        name: "Border Color",
+        hint: "Color for the progress border.",
+        scope: "client",
+        config: true,
+        type: String,
+        default: "#ffffff",
+        onChange: () => CountdownTrackerApp.instance?.render()
+    });
+
     game.settings.register("dh-improved-countdowns", "gmAlwaysShowNumbers", {
         name: "GM Always Shows Numbers",
         hint: "If enabled, the GM will always see the numerical value even if Display Mode is set to Visual.",
@@ -110,6 +165,111 @@ Hooks.once('init', () => {
         default: true,
         onChange: () => CountdownTrackerApp.instance?.render()
     });
+});
+
+Hooks.on('renderSettingsConfig', (app, html, data) => {
+    // Ensure html is a jQuery object
+    html = $(html);
+
+    const moduleId = "dh-improved-countdowns";
+    console.log("Improved Countdowns | Settings Config Rendered");
+
+    // Helper to find the form group for a setting
+    const getGroup = (settingName) => {
+        const input = html.find(`[name="${moduleId}.${settingName}"]`);
+        const group = input.closest(".form-group");
+        if (!group.length) console.warn(`Improved Countdowns | Could not find form group for ${settingName}`);
+        return group;
+    };
+
+    const enableOverlayInput = html.find(`[name="${moduleId}.enableVisualOverlay"]`);
+    const enableBorderInput = html.find(`[name="${moduleId}.enableVisualBorder"]`);
+    const displayModeInput = html.find(`[name="${moduleId}.displayMode"]`);
+
+    // Debug findings
+    if (!enableOverlayInput.length) console.warn("Improved Countdowns | Enable Overlay Input not found");
+    // if (!displayModeInput.length) console.warn("Improved Countdowns | Display Mode Input not found");
+
+    const fillTypeGroup = getGroup("fillType");
+    const invertProgressGroup = getGroup("invertProgress");
+    const fillColorGroup = getGroup("fillColor");
+    const invertBorderGroup = getGroup("invertBorder");
+    const borderColorGroup = getGroup("borderColor");
+    const barOrientationGroup = getGroup("barOrientation");
+
+    // Number specific groups
+    const numberColorGroup = getGroup("numberColor");
+    // Visual specific groups - we already have them above
+    const enableOverlayGroup = getGroup("enableVisualOverlay");
+    const enableBorderGroup = getGroup("enableVisualBorder");
+
+    const updateVisibility = () => {
+        const displayMode = displayModeInput.val();
+        const showVisualSettings = displayMode === "visual" || displayMode === "both";
+        const showNumberSettings = displayMode === "number" || displayMode === "both";
+
+        // Number Settings Visibility
+        if (showNumberSettings) {
+            numberColorGroup.show();
+        } else {
+            numberColorGroup.hide();
+        }
+
+        // Visual Settings Visibility
+        if (showVisualSettings) {
+            enableOverlayGroup.show();
+            enableBorderGroup.show();
+
+            // Nested visual settings logic
+            const overlayEnabled = enableOverlayInput.prop("checked");
+            const borderEnabled = enableBorderInput.prop("checked");
+            const fillType = html.find(`[name="${moduleId}.fillType"]`).val();
+
+            if (overlayEnabled) {
+                fillTypeGroup.show();
+                invertProgressGroup.show();
+                barOrientationGroup.show();
+
+                if (fillType === "grayscale") {
+                    fillColorGroup.hide();
+                } else {
+                    fillColorGroup.show();
+                }
+            } else {
+                fillTypeGroup.hide();
+                invertProgressGroup.hide();
+                fillColorGroup.hide();
+                barOrientationGroup.hide();
+            }
+
+            if (borderEnabled) {
+                invertBorderGroup.show();
+                borderColorGroup.show();
+            } else {
+                invertBorderGroup.hide();
+                borderColorGroup.hide();
+            }
+        } else {
+            // Hide all visual settings
+            enableOverlayGroup.hide();
+            enableBorderGroup.hide();
+            fillTypeGroup.hide();
+            invertProgressGroup.hide();
+            fillColorGroup.hide();
+            barOrientationGroup.hide();
+            invertBorderGroup.hide();
+            borderColorGroup.hide();
+        }
+    };
+
+    // Listeners
+    displayModeInput.on("change", updateVisibility);
+    if (enableOverlayInput.length && enableBorderInput.length) {
+        html.find(`[name="${moduleId}.fillType"]`).on("change", updateVisibility);
+        enableOverlayInput.on("change", updateVisibility);
+        enableBorderInput.on("change", updateVisibility);
+        updateVisibility(); // Initial check
+    }
 });
 
 Hooks.once('ready', () => {

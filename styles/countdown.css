@@ -214,6 +214,14 @@
     /* Rotation handled inline to start at top */
 }
 
+/* Grayscale Filter */
+.grayscale-filter {
+    backdrop-filter: grayscale(100%) !important;
+    background: transparent !important;
+    opacity: 1 !important;
+    box-shadow: none !important;
+}
+
 .bar-visual.vertical {
     width: 100%;
     /* height is set inline */
