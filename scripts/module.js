@@ -146,6 +146,36 @@ Hooks.once('init', () => {
         onChange: () => CountdownTrackerApp.instance?.render()
     });
 
+    game.settings.register("dh-improved-countdowns", "borderStyle", {
+        name: "Border Style",
+        hint: "Choose the style of the progress border (for square icons).",
+        scope: "client",
+        config: true,
+        type: String,
+        choices: {
+            "full": "Full Border",
+            "edge": "Single Edge"
+        },
+        default: "full",
+        onChange: () => CountdownTrackerApp.instance?.render()
+    });
+
+    game.settings.register("dh-improved-countdowns", "borderEdge", {
+        name: "Border Edge",
+        hint: "Choose which edge to display the border on.",
+        scope: "client",
+        config: true,
+        type: String,
+        choices: {
+            "bottom": "Bottom",
+            "top": "Top",
+            "left": "Left",
+            "right": "Right"
+        },
+        default: "bottom",
+        onChange: () => CountdownTrackerApp.instance?.render()
+    });
+
     game.settings.register("dh-improved-countdowns", "borderColor", {
         name: "Border Color",
         hint: "Color for the progress border.",
@@ -195,6 +225,8 @@ Hooks.on('renderSettingsConfig', (app, html, data) => {
     const fillColorGroup = getGroup("fillColor");
     const invertBorderGroup = getGroup("invertBorder");
     const borderColorGroup = getGroup("borderColor");
+    const borderStyleGroup = getGroup("borderStyle");
+    const borderEdgeGroup = getGroup("borderEdge");
     const barOrientationGroup = getGroup("barOrientation");
 
     // Number specific groups
@@ -245,9 +277,19 @@ Hooks.on('renderSettingsConfig', (app, html, data) => {
             if (borderEnabled) {
                 invertBorderGroup.show();
                 borderColorGroup.show();
+                borderStyleGroup.show();
+
+                const borderStyle = html.find(`[name="${moduleId}.borderStyle"]`).val();
+                if (borderStyle === "edge") {
+                    borderEdgeGroup.show();
+                } else {
+                    borderEdgeGroup.hide();
+                }
             } else {
                 invertBorderGroup.hide();
                 borderColorGroup.hide();
+                borderStyleGroup.hide();
+                borderEdgeGroup.hide();
             }
         } else {
             // Hide all visual settings
@@ -259,6 +301,8 @@ Hooks.on('renderSettingsConfig', (app, html, data) => {
             barOrientationGroup.hide();
             invertBorderGroup.hide();
             borderColorGroup.hide();
+            borderStyleGroup.hide();
+            borderEdgeGroup.hide();
         }
     };
 
@@ -266,6 +310,7 @@ Hooks.on('renderSettingsConfig', (app, html, data) => {
     displayModeInput.on("change", updateVisibility);
     if (enableOverlayInput.length && enableBorderInput.length) {
         html.find(`[name="${moduleId}.fillType"]`).on("change", updateVisibility);
+        html.find(`[name="${moduleId}.borderStyle"]`).on("change", updateVisibility);
         enableOverlayInput.on("change", updateVisibility);
         enableBorderInput.on("change", updateVisibility);
         updateVisibility(); // Initial check

@@ -62,6 +62,8 @@ export class CountdownTrackerApp extends HandlebarsApplicationMixin(ApplicationV
         const enableVisualBorder = game.settings.get("dh-improved-countdowns", "enableVisualBorder");
         const invertBorder = game.settings.get("dh-improved-countdowns", "invertBorder");
         const borderColor = game.settings.get("dh-improved-countdowns", "borderColor");
+        const borderStyle = game.settings.get("dh-improved-countdowns", "borderStyle");
+        const borderEdge = game.settings.get("dh-improved-countdowns", "borderEdge");
         const gmAlwaysShowNumbers = game.settings.get("dh-improved-countdowns", "gmAlwaysShowNumbers");
 
         const showNumbers = (isGM && gmAlwaysShowNumbers) || displayMode === "number" || displayMode === "both";
@@ -112,6 +114,8 @@ export class CountdownTrackerApp extends HandlebarsApplicationMixin(ApplicationV
             enableVisualBorder,
             invertBorder,
             borderColor,
+            borderStyle,
+            borderEdge,
             invertProgress,
             numberColor
         };
