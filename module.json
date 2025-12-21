@@ -1,5 +1,5 @@
 {
-    "name": "dh-improved-countdowns",
+    "id": "dh-improved-countdowns",
     "title": "Improved Countdowns",
     "description": "A modern, draggable countdown tracker for the Daggerheart system.",
     "version": "1.0.0",
@@ -15,9 +15,13 @@
             "discord": "cptn_cosmo"
         }
     ],
-    "systems": [
-        "daggerheart"
-    ],
+    "relationships": {
+        "systems": [
+            {
+                "id": "daggerheart"
+            }
+        ]
+    },
     "esmodules": [
         "scripts/module.js"
     ],
