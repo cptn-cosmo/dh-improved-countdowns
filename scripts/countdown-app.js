@@ -43,7 +43,11 @@ export class CountdownTrackerApp extends HandlebarsApplicationMixin(ApplicationV
 
     static initialize() {
         this.instance = new CountdownTrackerApp();
-        const pos = game.settings.get("dh-improved-countdowns", "position");
+        let pos = game.settings.get("dh-improved-countdowns", "position");
+        if (!pos || (!pos.top && !pos.left) || (pos.top === 0 && pos.left === 0 && !pos.width)) {
+            // Default to top-left if no valid position is stored
+            pos = { top: 100, left: 100 };
+        }
         this.instance.render(true, { position: pos });
     }
 

@@ -108,6 +108,27 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
+    max-height: 60vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 4px;
+    /* Space for scrollbar */
+    /* Custom scrollbar for webkit */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+.countdowns-list::-webkit-scrollbar {
+    width: 4px;
+}
+
+.countdowns-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.countdowns-list::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
 }
 
 .countdown-item {
@@ -125,16 +146,36 @@
     letter-spacing: 0.5px;
     color: rgba(255, 255, 255, 0.8);
     text-align: center;
+    /* max-width removed to allow natural width, or increased if needed */
     max-width: 150px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    /* Allow wrapping */
+    line-height: 1.2;
+    transition: max-width 0.3s ease;
+}
+
+.countdown-tracker-window:not(.minimized):hover .countdown-name {
+    max-width: 250px;
+    /* Reduced from none to provide some limit, or use none */
+    overflow: visible;
+    white-space: normal;
+    /* Allow wrapping */
 }
 
 .countdown-visual {
     display: flex;
     align-items: center;
     gap: 10px;
+}
+
+.visual-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Ensure the number overlay is positioned relative to this wrapper */
 }
 
 .icon-container {
@@ -164,10 +205,9 @@
 
 .value-overlay {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     pointer-events: none;
     display: flex;
     align-items: center;
@@ -179,9 +219,18 @@
     font-weight: 800;
     color: #fff;
     text-shadow: 0 0 4px rgba(0, 0, 0, 0.9), 0 0 8px rgba(0, 0, 0, 0.9);
+    width: max-content;
+    /* Allow numbers to extend beyond icon width if needed */
+    pointer-events: none;
+    z-index: 10;
 }
 
 .value-overlay.visual {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    transform: none;
     background: rgba(0, 0, 0, 0.2);
 }
 
