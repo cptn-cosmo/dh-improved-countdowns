@@ -5,8 +5,9 @@
         </div>
         <div class="header-controls">
             {{#if isGM}}
-            <a class="control-btn" data-action="addCountdown" data-tooltip="Add New Countdown">
-                <i class="fa-solid fa-plus-circle"></i>
+            <a class="control-btn" data-action="addCountdown"
+                data-tooltip="{{#if hasCountdowns}}Manage Countdowns{{else}}Add New Countdown{{/if}}">
+                <i class="fa-solid {{#if hasCountdowns}}fa-pen-to-square{{else}}fa-plus-circle{{/if}}"></i>
             </a>
             {{/if}}
             <a class="control-btn" data-action="toggleLock"

@@ -99,8 +99,11 @@ export class CountdownTrackerApp extends HandlebarsApplicationMixin(ApplicationV
             }
         }
 
+        const hasCountdowns = Object.keys(countdowns).length > 0;
+
         return {
             countdowns,
+            hasCountdowns,
             isGM,
             isMinimized,
             isLocked,
