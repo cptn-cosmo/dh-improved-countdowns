@@ -12,6 +12,7 @@ export class CountdownTrackerApp extends HandlebarsApplicationMixin(ApplicationV
             startLeft: 0,
             startTop: 0
         };
+        this._isHovered = false;
     }
 
     static DEFAULT_OPTIONS = {
@@ -172,6 +173,7 @@ export class CountdownTrackerApp extends HandlebarsApplicationMixin(ApplicationV
 
     _onRender(context, options) {
         this.#setupDragging();
+        this.#setupHoverTracking();
     }
 
     #setupDragging() {
@@ -181,6 +183,27 @@ export class CountdownTrackerApp extends HandlebarsApplicationMixin(ApplicationV
         if (!dragHandle) return;
 
         dragHandle.addEventListener('mousedown', this.#onDragStart.bind(this));
+    }
+
+    #setupHoverTracking() {
+        const window = this.element.querySelector('.countdown-tracker-window');
+        if (!window) return;
+
+        if (this._isHovered) {
+            window.classList.add('force-hover');
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    window.classList.remove('force-hover');
+                });
+            });
+        }
+
+        window.addEventListener('mouseenter', () => {
+            this._isHovered = true;
+        });
+        window.addEventListener('mouseleave', () => {
+            this._isHovered = false;
+        });
     }
 
     #onDragStart(e) {

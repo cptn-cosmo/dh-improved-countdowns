@@ -28,11 +28,13 @@
     font-family: 'Inter', 'Roboto', sans-serif;
 }
 
-.countdown-tracker-window:hover {
+.countdown-tracker-window:hover,
+.countdown-tracker-window.force-hover {
     background: rgba(20, 20, 25, 0.85);
     border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
 }
+
 
 .countdown-tracker-window.minimized {
     min-width: fit-content;
@@ -47,15 +49,18 @@
     gap: 0;
 }
 
-.countdown-tracker-window.minimized:hover {
+.countdown-tracker-window.minimized:hover,
+.countdown-tracker-window.minimized.force-hover {
     min-width: 120px;
 }
 
-.countdown-tracker-window.minimized:hover .value-control {
+.countdown-tracker-window.minimized:hover .value-control,
+.countdown-tracker-window.minimized.force-hover .value-control {
     display: flex;
 }
 
-.countdown-tracker-window.minimized:hover .countdown-visual {
+.countdown-tracker-window.minimized:hover .countdown-visual,
+.countdown-tracker-window.minimized.force-hover .countdown-visual {
     gap: 10px;
 }
 
@@ -70,7 +75,8 @@
     transition: all 0.2s ease;
 }
 
-.countdown-tracker-window:hover .tracker-header {
+.countdown-tracker-window:hover .tracker-header,
+.countdown-tracker-window.force-hover .tracker-header {
     opacity: 1;
     height: 24px;
     margin-bottom: 4px;
@@ -156,12 +162,11 @@
     transition: max-width 0.3s ease;
 }
 
-.countdown-tracker-window:not(.minimized):hover .countdown-name {
+.countdown-tracker-window:not(.minimized):hover .countdown-name,
+.countdown-tracker-window:not(.minimized).force-hover .countdown-name {
     max-width: 250px;
-    /* Reduced from none to provide some limit, or use none */
     overflow: visible;
     white-space: normal;
-    /* Allow wrapping */
 }
 
 .countdown-visual {
@@ -297,7 +302,8 @@
     font-size: 12px;
 }
 
-.countdown-item:hover .value-control {
+.countdown-item:hover .value-control,
+.countdown-tracker-window.force-hover .countdown-item .value-control {
     opacity: 1;
 }
 
